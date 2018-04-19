@@ -1,5 +1,7 @@
 # media-encoder-host-broker
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/chrisguttandin/media-encoder-host-broker.svg)](https://greenkeeper.io/)
+
 **The broker which is used by the media-encoder-host package.**
 
 [![tests](https://img.shields.io/travis/chrisguttandin/media-encoder-host-broker/master.svg?style=flat-square)](https://travis-ci.org/chrisguttandin/media-encoder-host-broker)
