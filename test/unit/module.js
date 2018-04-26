@@ -158,12 +158,14 @@ describe('module', () => {
 
         });
 
-        describe('load()', () => {
+        describe('register()', () => {
 
-            let url;
+            let port;
 
             beforeEach(() => {
-                url = 'a fake url';
+                const messageChannel = new MessageChannel();
+
+                port = messageChannel.port1;
             });
 
             it('should send the correct message', function (done) {
@@ -174,14 +176,14 @@ describe('module', () => {
 
                     expect(data).to.deep.equal({
                         id: data.id,
-                        method: 'load',
-                        params: { url }
+                        method: 'register',
+                        params: { port }
                     });
 
                     done();
                 });
 
-                mediaEncoderHost.load(url);
+                mediaEncoderHost.register(port);
             });
 
         });

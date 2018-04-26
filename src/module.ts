@@ -36,9 +36,9 @@ export const wrap: TMediaEncoderHostBrokerWrapper = createBroker
             return { encoderId, port };
         };
     },
-    load: ({ call }) => {
-        return (url) => {
-            return call('load', { url });
+    register: ({ call }) => {
+        return (port) => {
+            return call('register', { port }, [ port ]);
         };
     }
 });

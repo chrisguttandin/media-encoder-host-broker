@@ -8,6 +8,6 @@ export interface IMediaEncoderHostBrokerDefinition extends IBrokerDefinition {
 
     instantiate (mimeType: string): Promise<{ encoderId: number, port: MessagePort }>;
 
-    load (url: string): Promise<RegExp>;
+    register (port: MessagePort): Promise<RegExp>;
 
 }
