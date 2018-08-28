@@ -70,6 +70,8 @@ describe('module', () => {
 
                 mediaEncoderHost = wrap(worker);
             }
+
+            URL.revokeObjectURL(url);
         });
 
         describe('cancel()', () => {
