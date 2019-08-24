@@ -9,24 +9,18 @@ export * from './types';
 
 const encoderIds: Set<number> = new Set();
 
-export const wrap: TMediaEncoderHostBrokerWrapper = createBroker
-    <IMediaEncoderHostBrokerDefinition, TMediaEncoderHostWorkerDefinition>
-({
-    cancel: ({ call }) => {
-        return async (encoderId: number): Promise<void> => {
-            await call('cancel', { encoderId });
+export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHostBrokerDefinition, TMediaEncoderHostWorkerDefinition>({
+    cancel: ({ call }) => async (encoderId) => {
+        await call('cancel', { encoderId });
 
-            encoderIds.delete(encoderId);
-        };
+        encoderIds.delete(encoderId);
     },
-    encode: ({ call }) => {
-        return async (encoderId: number): Promise<ArrayBuffer[]> => {
-            const arrayBuffers = await call('encode', { encoderId });
+    encode: ({ call }) => async (encoderId) => {
+        const arrayBuffers = await call('encode', { encoderId });
 
-            encoderIds.delete(encoderId);
+        encoderIds.delete(encoderId);
 
-            return arrayBuffers;
-        };
+        return arrayBuffers;
     },
     instantiate: ({ call }) => {
         return async (mimeType) => {
@@ -36,10 +30,8 @@ export const wrap: TMediaEncoderHostBrokerWrapper = createBroker
             return { encoderId, port };
         };
     },
-    register: ({ call }) => {
-        return (port) => {
-            return call('register', { port }, [ port ]);
-        };
+    register: ({ call }) => (port) => {
+        return call('register', { port }, [ port ]);
     }
 });
 
