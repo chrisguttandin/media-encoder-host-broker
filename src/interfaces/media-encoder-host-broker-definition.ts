@@ -2,7 +2,7 @@ import { IBrokerDefinition } from 'broker-factory';
 
 export interface IMediaEncoderHostBrokerDefinition extends IBrokerDefinition {
 
-    cancel (encoderId: number): Promise<void>;
+    cancel (encoderId: number): Promise<void>; // tslint:disable-line:invalid-void
 
     encode (encoderId: number): Promise<ArrayBuffer[]>;
 
