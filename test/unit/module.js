@@ -105,9 +105,11 @@ describe('module', () => {
         describe('encode()', () => {
 
             let encoderId;
+            let timeslice;
 
             beforeEach(() => {
                 encoderId = 63;
+                timeslice = 300;
             });
 
             it('should send the correct message', function (done) {
@@ -119,13 +121,13 @@ describe('module', () => {
                     expect(data).to.deep.equal({
                         id: data.id,
                         method: 'encode',
-                        params: { encoderId }
+                        params: { encoderId, timeslice }
                     });
 
                     done();
                 });
 
-                mediaEncoderHost.encode(encoderId);
+                mediaEncoderHost.encode(encoderId, timeslice);
             });
 
         });

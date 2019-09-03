@@ -15,8 +15,8 @@ export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHo
 
         encoderIds.delete(encoderId);
     },
-    encode: ({ call }) => async (encoderId) => {
-        const arrayBuffers = await call('encode', { encoderId });
+    encode: ({ call }) => async (encoderId, timeslice) => {
+        const arrayBuffers = await call('encode', { encoderId, timeslice });
 
         encoderIds.delete(encoderId);
 
