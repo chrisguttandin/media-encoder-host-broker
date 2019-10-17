@@ -135,9 +135,11 @@ describe('module', () => {
         describe('instantiate()', () => {
 
             let mimeType;
+            let sampleRate;
 
             beforeEach(() => {
                 mimeType = 'a fake mimeType';
+                sampleRate = 48000;
             });
 
             it('should send the correct message', function (done) {
@@ -151,13 +153,13 @@ describe('module', () => {
                     expect(data).to.deep.equal({
                         id: data.id,
                         method: 'instantiate',
-                        params: { encoderId: data.params.encoderId, mimeType }
+                        params: { encoderId: data.params.encoderId, mimeType, sampleRate }
                     });
 
                     done();
                 });
 
-                mediaEncoderHost.instantiate(mimeType);
+                mediaEncoderHost.instantiate(mimeType, sampleRate);
             });
 
         });

@@ -23,9 +23,9 @@ export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHo
         return arrayBuffers;
     },
     instantiate: ({ call }) => {
-        return async (mimeType) => {
+        return async (mimeType, sampleRate) => {
             const encoderId = addUniqueNumber(encoderIds);
-            const port = await call('instantiate', { encoderId, mimeType });
+            const port = await call('instantiate', { encoderId, mimeType, sampleRate });
 
             return { encoderId, port };
         };
