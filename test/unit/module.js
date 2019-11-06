@@ -74,34 +74,6 @@ describe('module', () => {
             URL.revokeObjectURL(url);
         });
 
-        describe('cancel()', () => {
-
-            let encoderId;
-
-            beforeEach(() => {
-                encoderId = 63;
-            });
-
-            it('should send the correct message', function (done) {
-                this.timeout(6000);
-
-                Worker.addEventListener(0, 'message', ({ data }) => {
-                    expect(data.id).to.be.a('number');
-
-                    expect(data).to.deep.equal({
-                        id: data.id,
-                        method: 'cancel',
-                        params: { encoderId }
-                    });
-
-                    done();
-                });
-
-                mediaEncoderHost.cancel(encoderId);
-            });
-
-        });
-
         describe('encode()', () => {
 
             let encoderId;

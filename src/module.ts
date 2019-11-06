@@ -10,11 +10,6 @@ export * from './types';
 const encoderIds: Set<number> = new Set();
 
 export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHostBrokerDefinition, TMediaEncoderHostWorkerDefinition>({
-    cancel: ({ call }) => async (encoderId) => {
-        await call('cancel', { encoderId });
-
-        encoderIds.delete(encoderId);
-    },
     encode: ({ call }) => async (encoderId, timeslice) => {
         const arrayBuffers = await call('encode', { encoderId, timeslice });
 
