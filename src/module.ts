@@ -10,12 +10,14 @@ export * from './types';
 const encoderIds: Set<number> = new Set();
 
 export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHostBrokerDefinition, TMediaEncoderHostWorkerDefinition>({
-    encode: ({ call }) => async (encoderId, timeslice) => {
-        const arrayBuffers = await call('encode', { encoderId, timeslice });
+    encode: ({ call }) => {
+        return async (encoderId, timeslice) => {
+            const arrayBuffers = await call('encode', { encoderId, timeslice });
 
-        encoderIds.delete(encoderId);
+            encoderIds.delete(encoderId);
 
-        return arrayBuffers;
+            return arrayBuffers;
+        };
     },
     instantiate: ({ call }) => {
         return async (mimeType, sampleRate) => {
@@ -25,8 +27,10 @@ export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHo
             return { encoderId, port };
         };
     },
-    register: ({ call }) => (port) => {
-        return call('register', { port }, [ port ]);
+    register: ({ call }) => {
+        return (port) => {
+            return call('register', { port }, [ port ]);
+        };
     }
 });
 
