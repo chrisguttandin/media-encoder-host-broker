@@ -4,8 +4,12 @@ import { TMediaEncoderHostWorkerDefinition } from 'media-encoder-host-worker';
 import { IMediaEncoderHostBrokerDefinition } from './interfaces';
 import { TMediaEncoderHostBrokerLoader, TMediaEncoderHostBrokerWrapper } from './types';
 
-export * from './interfaces';
-export * from './types';
+/*
+ * @todo Explicitly referencing the barrel file seems to be necessary when enabling the
+ * isolatedModules compiler option.
+ */
+export * from './interfaces/index';
+export * from './types/index';
 
 const encoderIds: Set<number> = new Set();
 
