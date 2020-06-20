@@ -33,7 +33,7 @@ export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHo
     },
     register: ({ call }) => {
         return (port) => {
-            return call('register', { port }, [ port ]);
+            return call('register', { port }, [port]);
         };
     }
 });
