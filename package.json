@@ -12,7 +12,7 @@
         "@babel/runtime": "^7.12.5",
         "broker-factory": "^3.0.28",
         "fast-unique-numbers": "^5.0.21",
-        "media-encoder-host-worker": "^9.0.30",
+        "media-encoder-host-worker": "^9.0.31",
         "tslib": "^2.1.0"
     },
     "description": "The broker which is used by the media-encoder-host package.",
