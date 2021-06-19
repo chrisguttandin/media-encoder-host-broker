@@ -13,7 +13,7 @@
         "broker-factory": "^3.0.48",
         "fast-unique-numbers": "^6.0.3",
         "media-encoder-host-worker": "^9.0.50",
-        "tslib": "^2.2.0"
+        "tslib": "^2.3.0"
     },
     "description": "The broker which is used by the media-encoder-host package.",
     "devDependencies": {
