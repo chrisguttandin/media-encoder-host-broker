@@ -84,9 +84,7 @@ describe('module', () => {
                 timeslice = 300;
             });
 
-            it('should send the correct message', function (done) {
-                this.timeout(6000);
-
+            it('should send the correct message', (done) => {
                 Worker.addEventListener(0, 'message', ({ data }) => {
                     expect(data.id).to.be.a('number');
 
@@ -112,9 +110,7 @@ describe('module', () => {
                 sampleRate = 48000;
             });
 
-            it('should send the correct message', function (done) {
-                this.timeout(6000);
-
+            it('should send the correct message', (done) => {
                 Worker.addEventListener(0, 'message', ({ data }) => {
                     expect(data.id).to.be.a('number');
 
@@ -142,9 +138,7 @@ describe('module', () => {
                 port = messageChannel.port1;
             });
 
-            it('should send the correct message', function (done) {
-                this.timeout(6000);
-
+            it('should send the correct message', (done) => {
                 Worker.addEventListener(0, 'message', ({ data }) => {
                     expect(data.id).to.be.a('number');
 
