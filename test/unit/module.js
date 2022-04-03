@@ -60,99 +60,101 @@ describe('module', () => {
         url = URL.createObjectURL(blob);
     });
 
-    leche.withData(['loaded', 'wrapped'], (method) => {
-        let mediaEncoderHost;
-
-        beforeEach(() => {
-            if (method === 'loaded') {
-                mediaEncoderHost = load(url);
-            } else {
-                const worker = new Worker(url);
-
-                mediaEncoderHost = wrap(worker);
-            }
-
-            URL.revokeObjectURL(url);
-        });
-
-        describe('encode()', () => {
-            let encoderId;
-            let timeslice;
+    for (const method of ['loaded', 'wrapped']) {
+        describe(`with a ${method} worker`, () => {
+            let mediaEncoderHost;
 
             beforeEach(() => {
-                encoderId = 63;
-                timeslice = 300;
+                if (method === 'loaded') {
+                    mediaEncoderHost = load(url);
+                } else {
+                    const worker = new Worker(url);
+
+                    mediaEncoderHost = wrap(worker);
+                }
+
+                URL.revokeObjectURL(url);
             });
 
-            it('should send the correct message', (done) => {
-                Worker.addEventListener(0, 'message', ({ data }) => {
-                    expect(data.id).to.be.a('number');
+            describe('encode()', () => {
+                let encoderId;
+                let timeslice;
 
-                    expect(data).to.deep.equal({
-                        id: data.id,
-                        method: 'encode',
-                        params: { encoderId, timeslice }
-                    });
-
-                    done();
+                beforeEach(() => {
+                    encoderId = 63;
+                    timeslice = 300;
                 });
 
-                mediaEncoderHost.encode(encoderId, timeslice);
-            });
-        });
+                it('should send the correct message', (done) => {
+                    Worker.addEventListener(0, 'message', ({ data }) => {
+                        expect(data.id).to.be.a('number');
 
-        describe('instantiate()', () => {
-            let mimeType;
-            let sampleRate;
+                        expect(data).to.deep.equal({
+                            id: data.id,
+                            method: 'encode',
+                            params: { encoderId, timeslice }
+                        });
 
-            beforeEach(() => {
-                mimeType = 'a fake mimeType';
-                sampleRate = 48000;
-            });
-
-            it('should send the correct message', (done) => {
-                Worker.addEventListener(0, 'message', ({ data }) => {
-                    expect(data.id).to.be.a('number');
-
-                    expect(data.params.encoderId).to.be.a('number');
-
-                    expect(data).to.deep.equal({
-                        id: data.id,
-                        method: 'instantiate',
-                        params: { encoderId: data.params.encoderId, mimeType, sampleRate }
+                        done();
                     });
 
-                    done();
+                    mediaEncoderHost.encode(encoderId, timeslice);
+                });
+            });
+
+            describe('instantiate()', () => {
+                let mimeType;
+                let sampleRate;
+
+                beforeEach(() => {
+                    mimeType = 'a fake mimeType';
+                    sampleRate = 48000;
                 });
 
-                mediaEncoderHost.instantiate(mimeType, sampleRate);
-            });
-        });
+                it('should send the correct message', (done) => {
+                    Worker.addEventListener(0, 'message', ({ data }) => {
+                        expect(data.id).to.be.a('number');
 
-        describe('register()', () => {
-            let port;
+                        expect(data.params.encoderId).to.be.a('number');
 
-            beforeEach(() => {
-                const messageChannel = new MessageChannel();
+                        expect(data).to.deep.equal({
+                            id: data.id,
+                            method: 'instantiate',
+                            params: { encoderId: data.params.encoderId, mimeType, sampleRate }
+                        });
 
-                port = messageChannel.port1;
-            });
-
-            it('should send the correct message', (done) => {
-                Worker.addEventListener(0, 'message', ({ data }) => {
-                    expect(data.id).to.be.a('number');
-
-                    expect(data).to.deep.equal({
-                        id: data.id,
-                        method: 'register',
-                        params: { port }
+                        done();
                     });
 
-                    done();
+                    mediaEncoderHost.instantiate(mimeType, sampleRate);
+                });
+            });
+
+            describe('register()', () => {
+                let port;
+
+                beforeEach(() => {
+                    const messageChannel = new MessageChannel();
+
+                    port = messageChannel.port1;
                 });
 
-                mediaEncoderHost.register(port);
+                it('should send the correct message', (done) => {
+                    Worker.addEventListener(0, 'message', ({ data }) => {
+                        expect(data.id).to.be.a('number');
+
+                        expect(data).to.deep.equal({
+                            id: data.id,
+                            method: 'register',
+                            params: { port }
+                        });
+
+                        done();
+                    });
+
+                    mediaEncoderHost.register(port);
+                });
             });
         });
-    });
+    }
 });
