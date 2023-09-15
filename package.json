@@ -12,7 +12,6 @@
         "@babel/runtime": "^7.22.6",
         "broker-factory": "^3.0.84",
         "fast-unique-numbers": "^8.0.7",
-        "linked": "^0.2.0",
         "media-encoder-host-worker": "^9.1.11",
         "tslib": "^2.6.1"
     },
