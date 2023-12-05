@@ -11,7 +11,7 @@
     "dependencies": {
         "@babel/runtime": "^7.23.5",
         "broker-factory": "^3.0.89",
-        "fast-unique-numbers": "^8.0.11",
+        "fast-unique-numbers": "^8.0.12",
         "media-encoder-host-worker": "^9.1.15",
         "tslib": "^2.6.2"
     },
