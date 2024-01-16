@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.23.8",
-        "broker-factory": "^3.0.89",
+        "broker-factory": "^3.0.90",
         "fast-unique-numbers": "^8.0.12",
         "media-encoder-host-worker": "^9.1.16",
         "tslib": "^2.6.2"
