@@ -76,6 +76,32 @@ describe('module', () => {
                 URL.revokeObjectURL(url);
             });
 
+            describe('deregister()', () => {
+                let port;
+
+                beforeEach(() => {
+                    const messageChannel = new MessageChannel();
+
+                    port = messageChannel.port1;
+                });
+
+                it('should send the correct message', (done) => {
+                    Worker.addEventListener(0, 'message', ({ data }) => {
+                        expect(data.id).to.be.a('number');
+
+                        expect(data).to.deep.equal({
+                            id: data.id,
+                            method: 'deregister',
+                            params: { port }
+                        });
+
+                        done();
+                    });
+
+                    mediaEncoderHost.deregister(port);
+                });
+            });
+
             describe('encode()', () => {
                 let encoderId;
                 let timeslice;
