@@ -103,11 +103,11 @@ describe('module', () => {
             });
 
             describe('encode()', () => {
-                let encoderId;
+                let encoderInstanceId;
                 let timeslice;
 
                 beforeEach(() => {
-                    encoderId = 63;
+                    encoderInstanceId = 63;
                     timeslice = 300;
                 });
 
@@ -118,13 +118,13 @@ describe('module', () => {
                         expect(data).to.deep.equal({
                             id: data.id,
                             method: 'encode',
-                            params: { encoderId, timeslice }
+                            params: { encoderInstanceId, timeslice }
                         });
 
                         done();
                     });
 
-                    mediaEncoderHost.encode(encoderId, timeslice);
+                    mediaEncoderHost.encode(encoderInstanceId, timeslice);
                 });
             });
 
@@ -141,12 +141,12 @@ describe('module', () => {
                     Worker.addEventListener(0, 'message', ({ data }) => {
                         expect(data.id).to.be.a('number');
 
-                        expect(data.params.encoderId).to.be.a('number');
+                        expect(data.params.encoderInstanceId).to.be.a('number');
 
                         expect(data).to.deep.equal({
                             id: data.id,
                             method: 'instantiate',
-                            params: { encoderId: data.params.encoderId, mimeType, sampleRate }
+                            params: { encoderInstanceId: data.params.encoderInstanceId, mimeType, sampleRate }
                         });
 
                         done();

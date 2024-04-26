@@ -11,7 +11,7 @@ import { TMediaEncoderHostBrokerLoader, TMediaEncoderHostBrokerWrapper } from '.
 export * from './interfaces/index';
 export * from './types/index';
 
-const encoderIds: Set<number> = new Set();
+const encoderInstanceIds = new Set<number>();
 
 export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHostBrokerDefinition, TMediaEncoderHostWorkerDefinition>({
     deregister: ({ call }) => {
@@ -20,20 +20,20 @@ export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHo
         };
     },
     encode: ({ call }) => {
-        return async (encoderId, timeslice) => {
-            const arrayBuffers = await call('encode', { encoderId, timeslice });
+        return async (encoderInstanceId, timeslice) => {
+            const arrayBuffers = await call('encode', { encoderInstanceId, timeslice });
 
-            encoderIds.delete(encoderId);
+            encoderInstanceIds.delete(encoderInstanceId);
 
             return arrayBuffers;
         };
     },
     instantiate: ({ call }) => {
         return async (mimeType, sampleRate) => {
-            const encoderId = addUniqueNumber(encoderIds);
-            const port = await call('instantiate', { encoderId, mimeType, sampleRate });
+            const encoderInstanceId = addUniqueNumber(encoderInstanceIds);
+            const port = await call('instantiate', { encoderInstanceId, mimeType, sampleRate });
 
-            return { encoderId, port };
+            return { encoderInstanceId, port };
         };
     },
     register: ({ call }) => {
