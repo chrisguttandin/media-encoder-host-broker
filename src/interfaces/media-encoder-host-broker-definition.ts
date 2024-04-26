@@ -1,7 +1,7 @@
 import { IBrokerDefinition } from 'broker-factory';
 
 export interface IMediaEncoderHostBrokerDefinition extends IBrokerDefinition {
-    deregister(port: MessagePort): Promise<void>;
+    deregister(port: MessagePort): Promise<null>;
 
     encode(encoderInstanceId: number, timeslice: null | number): Promise<ArrayBuffer[]>;
 

@@ -77,12 +77,23 @@ describe('module', () => {
             });
 
             describe('deregister()', () => {
+                let encoderId;
                 let port;
 
-                beforeEach(() => {
+                beforeEach((done) => {
                     const messageChannel = new MessageChannel();
 
                     port = messageChannel.port1;
+
+                    Worker.addEventListener(0, 'message', ({ data }) => {
+                        if (data.method === 'register') {
+                            encoderId = data.params.encoderId;
+
+                            done();
+                        }
+                    });
+
+                    mediaEncoderHost.register(port);
                 });
 
                 it('should send the correct message', (done) => {
@@ -92,7 +103,7 @@ describe('module', () => {
                         expect(data).to.deep.equal({
                             id: data.id,
                             method: 'deregister',
-                            params: { port }
+                            params: { encoderId }
                         });
 
                         done();
@@ -168,11 +179,12 @@ describe('module', () => {
                 it('should send the correct message', (done) => {
                     Worker.addEventListener(0, 'message', ({ data }) => {
                         expect(data.id).to.be.a('number');
+                        expect(data.params.encoderId).to.be.a('number');
 
                         expect(data).to.deep.equal({
                             id: data.id,
                             method: 'register',
-                            params: { port }
+                            params: { encoderId: data.params.encoderId, port }
                         });
 
                         done();

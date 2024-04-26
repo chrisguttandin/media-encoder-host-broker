@@ -11,12 +11,25 @@ import { TMediaEncoderHostBrokerLoader, TMediaEncoderHostBrokerWrapper } from '.
 export * from './interfaces/index';
 export * from './types/index';
 
+const encoderIds = new Set<number>();
 const encoderInstanceIds = new Set<number>();
+const messagePorts = new WeakMap<MessagePort, number>();
 
 export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHostBrokerDefinition, TMediaEncoderHostWorkerDefinition>({
     deregister: ({ call }) => {
-        return (port) => {
-            return call('deregister', { port }, [port]);
+        return async (port) => {
+            const encoderId = messagePorts.get(port);
+
+            if (encoderId === undefined) {
+                throw new Error('There is no encoder registered with the given port.');
+            }
+
+            const result = await call('deregister', { encoderId });
+
+            encoderIds.delete(encoderId);
+            messagePorts.delete(port);
+
+            return result;
         };
     },
     encode: ({ call }) => {
@@ -37,8 +50,23 @@ export const wrap: TMediaEncoderHostBrokerWrapper = createBroker<IMediaEncoderHo
         };
     },
     register: ({ call }) => {
-        return (port) => {
-            return call('register', { port }, [port]);
+        return async (port) => {
+            if (messagePorts.has(port)) {
+                throw new Error('');
+            }
+
+            const encoderId = addUniqueNumber(encoderIds);
+
+            messagePorts.set(port, encoderId);
+
+            try {
+                return await call('register', { encoderId, port }, [port]);
+            } catch (err) {
+                encoderIds.delete(encoderId);
+                messagePorts.delete(port);
+
+                throw err;
+            }
         };
     }
 });
