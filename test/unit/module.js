@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { load, wrap } from '../../src/module';
 
 describe('module', () => {
@@ -80,7 +81,8 @@ describe('module', () => {
                 let encoderId;
                 let port;
 
-                beforeEach((done) => {
+                beforeEach(() => {
+                    const { promise, resolve } = Promise.withResolvers();
                     const messageChannel = new MessageChannel();
 
                     port = messageChannel.port1;
@@ -89,14 +91,18 @@ describe('module', () => {
                         if (data.method === 'register') {
                             encoderId = data.params.encoderId;
 
-                            done();
+                            resolve();
                         }
                     });
 
                     mediaEncoderHost.register(port);
+
+                    return promise;
                 });
 
-                it('should send the correct message', (done) => {
+                it('should send the correct message', () => {
+                    const { promise, resolve } = Promise.withResolvers();
+
                     Worker.addEventListener(0, 'message', ({ data }) => {
                         expect(data.id).to.be.a('number');
 
@@ -106,10 +112,12 @@ describe('module', () => {
                             params: { encoderId }
                         });
 
-                        done();
+                        resolve();
                     });
 
                     mediaEncoderHost.deregister(port);
+
+                    return promise;
                 });
             });
 
@@ -122,7 +130,9 @@ describe('module', () => {
                     timeslice = 300;
                 });
 
-                it('should send the correct message', (done) => {
+                it('should send the correct message', () => {
+                    const { promise, resolve } = Promise.withResolvers();
+
                     Worker.addEventListener(0, 'message', ({ data }) => {
                         expect(data.id).to.be.a('number');
 
@@ -132,10 +142,12 @@ describe('module', () => {
                             params: { encoderInstanceId, timeslice }
                         });
 
-                        done();
+                        resolve();
                     });
 
                     mediaEncoderHost.encode(encoderInstanceId, timeslice);
+
+                    return promise;
                 });
             });
 
@@ -148,7 +160,9 @@ describe('module', () => {
                     sampleRate = 48000;
                 });
 
-                it('should send the correct message', (done) => {
+                it('should send the correct message', () => {
+                    const { promise, resolve } = Promise.withResolvers();
+
                     Worker.addEventListener(0, 'message', ({ data }) => {
                         expect(data.id).to.be.a('number');
 
@@ -160,10 +174,12 @@ describe('module', () => {
                             params: { encoderInstanceId: data.params.encoderInstanceId, mimeType, sampleRate }
                         });
 
-                        done();
+                        resolve();
                     });
 
                     mediaEncoderHost.instantiate(mimeType, sampleRate);
+
+                    return promise;
                 });
             });
 
@@ -176,7 +192,9 @@ describe('module', () => {
                     port = messageChannel.port1;
                 });
 
-                it('should send the correct message', (done) => {
+                it('should send the correct message', () => {
+                    const { promise, resolve } = Promise.withResolvers();
+
                     Worker.addEventListener(0, 'message', ({ data }) => {
                         expect(data.id).to.be.a('number');
                         expect(data.params.encoderId).to.be.a('number');
@@ -187,10 +205,12 @@ describe('module', () => {
                             params: { encoderId: data.params.encoderId, port }
                         });
 
-                        done();
+                        resolve();
                     });
 
                     mediaEncoderHost.register(port);
+
+                    return promise;
                 });
             });
         });
